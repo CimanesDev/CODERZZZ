@@ -1,9 +1,12 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, Marker, useLoadScript, Autocomplete } from '@react-google-maps/api';
 import axios from 'axios';
 import Popup from './Popup';
 import DonationPopup from './DonationPopup';
 import './Map.css';
+
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 const Map = ({
   isCallForHelpMode,
@@ -24,7 +27,7 @@ const Map = ({
   const autocompleteRef = useRef(null);
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyD1JWD2LMUTfBiF6Gk5jpuMxMpE7_q9EE8', // Replace with your API key
+    googleMapsApiKey: apiKey, 
     libraries: ['places'],
   });
 
