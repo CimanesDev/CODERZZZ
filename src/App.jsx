@@ -2,25 +2,26 @@ import React, { useState } from 'react';
 import StartingPage from './components/StartingPage';
 import Navbar from './components/Navbar';
 import Map from './components/Map';
+import EmergencyContactsPopup from './components/EmergencyContactsPopup';
+import ChecklistPopup from './components/ChecklistPopup';
 import './App.css';
 
 function App() {
   const [isCallForHelpMode, setIsCallForHelpMode] = useState(false);
-  const [isDonateGoodsMode, setIsDonateGoodsMode] = useState(false); // Track donate goods mode
-  const [role, setRole] = useState(null); // Track the selected role (victim or responder)
-  const [pins, setPins] = useState([]); // Move pins state to App.js to persist across navigation
+  const [isDonateGoodsMode, setIsDonateGoodsMode] = useState(false);
+  const [role, setRole] = useState(null);
+  const [pins, setPins] = useState([]);
+  const [showEmergencyContacts, setShowEmergencyContacts] = useState(false);
+  const [showChecklist, setShowChecklist] = useState(false);
 
-  // Handle role selection
   const handleSelectRole = (selectedRole) => {
     setRole(selectedRole);
   };
 
-  // Handle back button click
   const handleBack = () => {
-    setRole(null); // Reset the role to return to the starting page
+    setRole(null);
   };
 
-  // Render the appropriate component based on the selected role
   const renderContent = () => {
     if (!role) {
       return <StartingPage onSelectRole={handleSelectRole} />;
@@ -31,6 +32,8 @@ function App() {
             onCallForHelp={() => setIsCallForHelpMode(true)}
             onDonateGoods={() => setIsDonateGoodsMode(true)}
             onBack={handleBack}
+            onEmergencyContacts={() => setShowEmergencyContacts(true)}
+            onChecklist={() => setShowChecklist(true)}
           />
           <Map
             isCallForHelpMode={isCallForHelpMode}
@@ -40,6 +43,12 @@ function App() {
             pins={pins}
             setPins={setPins}
           />
+          {showEmergencyContacts && (
+            <EmergencyContactsPopup onClose={() => setShowEmergencyContacts(false)} />
+          )}
+          {showChecklist && (
+            <ChecklistPopup onClose={() => setShowChecklist(false)} />
+          )}
         </>
       );
     } else if (role === 'responder') {

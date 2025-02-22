@@ -20,7 +20,7 @@ const Map = ({
   const [selectedPin, setSelectedPin] = useState(null);
   const [address, setAddress] = useState('');
   const [donationDetails, setDonationDetails] = useState({ goods: '', quantity: '' });
-  const [mapCenter, setMapCenter] = useState({ lat: 14, lng: 482 }); // State for map center
+  const [mapCenter, setMapCenter] = useState(null); // Start with null, set to user's location
   const autocompleteRef = useRef(null);
 
   const { isLoaded } = useLoadScript({
@@ -30,13 +30,14 @@ const Map = ({
 
   // Get the user's current location
   useEffect(() => {
-    if ((isCallForHelpMode || isDonateGoodsMode) && navigator.geolocation) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const userLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          console.log('User Location:', userLocation); // Debugging
           setMarkerPosition(userLocation);
           setMapCenter(userLocation); // Center the map on the user's location
           fetchAddress(userLocation);
@@ -48,8 +49,14 @@ const Map = ({
         },
         (error) => {
           console.error('Error getting user location:', error);
+          // Fallback to a default location if user denies location access
+          setMapCenter({ lat: 14, lng: 482 });
         }
       );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      // Fallback to a default location if geolocation is not supported
+      setMapCenter({ lat: 14, lng: 482 });
     }
   }, [isCallForHelpMode, isDonateGoodsMode]);
 
@@ -111,7 +118,7 @@ const Map = ({
       setIsLocationConfirmed(true);
       setMarkerPosition(null);
       setAddress('');
-      setIsCallForHelpMode(false);
+      setIsCallForHelpMode(false); // Exit "Call for Help" mode after confirming
     }
   };
 
@@ -130,7 +137,7 @@ const Map = ({
       setShowDonationPopup(false);
       setMarkerPosition(null);
       setAddress('');
-      setIsDonateGoodsMode(false);
+      setIsDonateGoodsMode(false); // Exit "Donate Goods" mode after confirming
     }
   };
 
@@ -150,18 +157,19 @@ const Map = ({
   useEffect(() => {
     if (isCallForHelpMode) {
       setIsDonateGoodsMode(false);
+      setIsLocationConfirmed(false); // Reset location confirmation when entering "Call for Help" mode
     } else if (isDonateGoodsMode) {
       setIsCallForHelpMode(false);
     }
   }, [isCallForHelpMode, isDonateGoodsMode, setIsCallForHelpMode, setIsDonateGoodsMode]);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded || !mapCenter) return <div>Loading...</div>;
 
   return (
     <>
       <GoogleMap
         zoom={12}
-        center={mapCenter} // Use the mapCenter state
+        center={mapCenter}
         mapContainerStyle={{ width: '100%', height: '100vh' }}
         onClick={isCallForHelpMode && !isLocationConfirmed ? handleMapClick : undefined}
       >
@@ -170,7 +178,7 @@ const Map = ({
           <Marker
             key={pin.id}
             position={pin.position}
-            onClick={() => handlePinClick(pin)} // Handle pin click
+            onClick={() => handlePinClick(pin)}
             icon={{
               url: pin.type === 'donation' ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
             }}
@@ -237,18 +245,6 @@ const Map = ({
           donationDetails={donationDetails}
           setDonationDetails={setDonationDetails}
         />
-      )}
-
-      {/* Confirmation message after disaster selection */}
-      {isLocationConfirmed && (
-        <div className="confirmation-popup">
-          <p>
-            You asked for help at <strong>{pins[pins.length - 1]?.address}</strong> with{" "}
-            <strong>{pins[pins.length - 1]?.disasterType}</strong>. Are you sure?
-          </p>
-          <button onClick={() => handleDeletePin(pins[pins.length - 1]?.id)}>Delete Pin</button>
-          <button onClick={() => setIsLocationConfirmed(false)}>Okay</button>
-        </div>
       )}
 
       {/* Pin details when a pin is selected */}

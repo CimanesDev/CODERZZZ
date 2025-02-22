@@ -1,10 +1,13 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  
-  .app {
-    display: flex;
-    height: 100vh;
-  }
+/* App Container */
+.app-container {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
 
+/* Map Container */
+.map-container {
+  flex: 1; /* Take up remaining space */
+  margin-left: 300px; /* Offset by navbar width */
+  height: 100vh; /* Full viewport height */
+  overflow: hidden; /* Prevent scrolling */
+}
