@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import StartingPage from './components/StartingPage';
 import Navbar from './components/Navbar';
@@ -7,7 +6,9 @@ import './App.css';
 
 function App() {
   const [isCallForHelpMode, setIsCallForHelpMode] = useState(false);
+  const [isDonateGoodsMode, setIsDonateGoodsMode] = useState(false); // Track donate goods mode
   const [role, setRole] = useState(null); // Track the selected role (victim or responder)
+  const [pins, setPins] = useState([]); // Move pins state to App.js to persist across navigation
 
   // Handle role selection
   const handleSelectRole = (selectedRole) => {
@@ -26,10 +27,18 @@ function App() {
     } else if (role === 'victim') {
       return (
         <>
-          <Navbar onCallForHelp={() => setIsCallForHelpMode(true)} onBack={handleBack} />
+          <Navbar
+            onCallForHelp={() => setIsCallForHelpMode(true)}
+            onDonateGoods={() => setIsDonateGoodsMode(true)}
+            onBack={handleBack}
+          />
           <Map
             isCallForHelpMode={isCallForHelpMode}
             setIsCallForHelpMode={setIsCallForHelpMode}
+            isDonateGoodsMode={isDonateGoodsMode}
+            setIsDonateGoodsMode={setIsDonateGoodsMode}
+            pins={pins}
+            setPins={setPins}
           />
         </>
       );
