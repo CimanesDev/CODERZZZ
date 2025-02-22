@@ -5,7 +5,7 @@ import axios from 'axios';
 import Popup from './Popup';
 import './Map.css';
 
-const Map = ({ isCallForHelpMode, setIsCallForHelpMode }) => { // Add setIsCallForHelpMode as a prop
+const Map = ({ isCallForHelpMode, setIsCallForHelpMode }) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [isLocationConfirmed, setIsLocationConfirmed] = useState(false);

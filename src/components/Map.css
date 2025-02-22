@@ -1,16 +1,16 @@
 /* src/components/Map.css */
 .search {
     position: absolute;
-    top: 20px; /* Position below the navbar */
+    top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1000; /* Ensure it appears above the map */
-    width: 400px; /* Adjust width as needed */
+    z-index: 1000;
+    width: 600px; /* Adjust width as needed */
     max-width: 90%; /* Ensure it doesn't overflow on smaller screens */
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,66 +20,39 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 20px;
     font-size: 16px;
     outline: none;
     transition: border-color 0.3s ease;
   }
   
   .input:focus {
-    border-color: #007bff; /* Highlight the input when focused */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a glow effect */
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
   }
   
-  /* Optional: Add a search icon inside the input */
-  .input-container {
-    position: relative;
-    width: 100%;
-  }
-  
-  .input-container .search-icon {
+  .confirm {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #888;
-    cursor: pointer;
-  }
-
-  /* src/components/Map.css */
-.confirm {
-    position: absolute;
-    top: 20px; /* Align with the search bar */
-    left: calc(50% + 210px); /* Position beside the search bar */
+    top: 70px; /* Position below the search bar */
+    left: 50%;
     transform: translateX(-50%);
-    z-index: 1000; /* Ensure it appears above the map */
+    z-index: 1000;
     padding: 10px 20px;
-    background-color: #007bff; /* Blue background */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
   }
   
   .confirm:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
   }
   
-  /* Optional: Adjust for smaller screens */
-  @media (max-width: 768px) {
-    .confirm {
-      top: 70px; /* Move below the search bar on smaller screens */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%; /* Full width for better usability */
-    }
-  }
-
-/* src/components/Map.css */
-.confirmation-popup {
+  .confirmation-popup {
     position: absolute;
     top: 20px;
     left: 50%;
@@ -108,18 +81,4 @@
   
   .confirmation-popup button:last-of-type {
     background-color: #007bff;
-    color: white;
-  }
-  
-  .pin-details {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
   }
