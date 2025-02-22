@@ -8,13 +8,3 @@ body {
     height: 100vh;
   }
 
-  /* src/App.css */
-.responder-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-size: 1.5rem;
-  color: #555;
-}
-
