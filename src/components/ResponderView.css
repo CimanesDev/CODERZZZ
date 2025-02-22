@@ -1,0 +1,45 @@
+.responder-view {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .map-container {
+    flex: 1;
+  }
+  
+  .sidebar {
+    width: 300px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar.closed {
+    transform: translateX(100%);
+  }
+  
+  .toggle-sidebar {
+    margin-bottom: 20px;
+  }
+  
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .pin-list {
+    overflow-y: auto;
+    max-height: 80vh;
+  }
+  
+  .pin-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .pin-item:hover {
+    background-color: #e0e0e0;
+  }
