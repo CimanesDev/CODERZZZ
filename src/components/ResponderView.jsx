@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 import './ResponderView.css';
 
 const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Ensure this is set in your .env file
@@ -7,11 +7,14 @@ const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Ensure this is set 
 const ResponderView = ({ pins, isSidebarOpen }) => {
   const [selectedPin, setSelectedPin] = useState(null);
   const [mapCenter, setMapCenter] = useState({ lat: 14, lng: 482 }); // Default center
+  const [userLocation, setUserLocation] = useState(null); // Store user's location
+  const [directions, setDirections] = useState(null); // Store directions response
+  const [showPopup, setShowPopup] = useState(false); // Control popup visibility
 
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: apiKey,
-    libraries: ['places'],
+    libraries: ['places', 'directions'],
   });
 
   // Get the user's current location when the component mounts
@@ -19,11 +22,12 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const userLocation = {
+          const location = {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          setMapCenter(userLocation); // Set map center to user's location
+          setUserLocation(location); // Store user's location
+          setMapCenter(location); // Set map center to user's location
         },
         (error) => {
           console.error('Error getting user location:', error);
@@ -45,6 +49,36 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
   const handlePinClick = (pin) => {
     setSelectedPin(pin);
     setMapCenter(pin.position); // Center the map on the clicked pin's location
+    setShowPopup(true); // Show the popup
+  };
+
+  // Handle "Yes" button click in the popup
+  const handleConfirmDirections = () => {
+    if (userLocation) {
+      // Calculate directions from user's location to the selected pin
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: userLocation,
+          destination: selectedPin.position,
+          travelMode: window.google.maps.TravelMode.DRIVING, // You can change this to WALKING, BICYCLING, etc.
+        },
+        (result, status) => {
+          if (status === window.google.maps.DirectionsStatus.OK) {
+            setDirections(result); // Set directions to display on the map
+          } else {
+            console.error('Error fetching directions:', status);
+          }
+        }
+      );
+    }
+    setShowPopup(false); // Close the popup
+  };
+
+  // Handle "No" button click in the popup
+  const handleCancelDirections = () => {
+    setDirections(null); // Clear directions
+    setShowPopup(false); // Close the popup
   };
 
   // Show a loading message while the script is loading
@@ -72,6 +106,16 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
               }}
             />
           ))}
+
+          {/* Render directions if available */}
+          {directions && (
+            <DirectionsRenderer
+              directions={directions}
+              options={{
+                suppressMarkers: true, // Hide default markers
+              }}
+            />
+          )}
         </GoogleMap>
       </div>
 
@@ -91,6 +135,23 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
           ))}
         </div>
       </div>
+
+      {/* Popup for directions confirmation */}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup">
+            <h3>Do you want directions to this place?</h3>
+            <div className="popup-buttons">
+              <button className="popup-button cancel" onClick={handleCancelDirections}>
+                No
+              </button>
+              <button className="popup-button cofirm" onClick={handleConfirmDirections}>
+               Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
