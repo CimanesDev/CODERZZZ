@@ -13,18 +13,23 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
 
       {/* Buttons for Victim View */}
       <div className="nav-buttons">
-        <button className="nav-button" onClick={onCallForHelp}>
-          Call for Help
-        </button>
-        <button className="nav-button" onClick={onDonateGoods}>
-          Donate Goods
-        </button>
-        <button className="nav-button" onClick={onEmergencyContacts}>
-          Emergency Contacts
-        </button>
-        <button className="nav-button" onClick={onChecklist}>
-          Disaster Preparedness Checklist
-        </button>
+        {/* Show these buttons only in Victim View */}
+        {role === 'victim' && (
+          <>
+            <button className="nav-button" onClick={onCallForHelp}>
+              Call for Help
+            </button>
+            <button className="nav-button" onClick={onDonateGoods}>
+              Donate Goods
+            </button>
+            <button className="nav-button" onClick={onEmergencyContacts}>
+              Emergency Contacts
+            </button>
+            <button className="nav-button" onClick={onChecklist}>
+              Disaster Preparedness Checklist
+            </button>
+          </>
+        )}
 
         {/* "View All Requests" Button (visible only in Responder View) */}
         {role === 'responder' && (
