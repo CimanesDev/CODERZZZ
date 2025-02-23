@@ -10,7 +10,7 @@ const StartingPage = ({ onSelectRole }) => {
       {/* Logo and Title */}
       <div className="header">
         <img src={logo} alt="SalbaBida Logo" className="logo" />
-        <h1>Welcome to SalbaBida!</h1>
+        <h1>SalbaBida</h1>
       </div>
 
       {/* Cards Container */}
@@ -18,15 +18,15 @@ const StartingPage = ({ onSelectRole }) => {
         {/* Victim Card */}
         <div className="card" onClick={() => onSelectRole('victim')}>
           <img src={victim} alt="Victim" className="card-image" />
-          <h2>Victim</h2>
-          <p>Click here if you need help.</p>
+          <h2>Biktima</h2>
+          <p>Nangangailangan ka ba ng tulong?</p>
         </div>
 
         {/* Responder Card */}
         <div className="card" onClick={() => onSelectRole('responder')}>
           <img src={responder} alt="Responder" className="card-image" />
-          <h2>Responder</h2>
-          <p>Click here if you want to help.</p>
+          <h2>Tutulong</h2>
+          <p>May kakayahan ka bang tumulong?</p>
         </div>
       </div>
     </div>

@@ -17,16 +17,16 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
         {role === 'victim' && (
           <>
             <button className="nav-button" onClick={onCallForHelp}>
-              Call for Help
+              Manghingi ng tulong
             </button>
             <button className="nav-button" onClick={onDonateGoods}>
-              Donate Goods
+              Magdonate
             </button>
             <button className="nav-button" onClick={onEmergencyContacts}>
               Emergency Contacts
             </button>
             <button className="nav-button" onClick={onChecklist}>
-              Disaster Preparedness Checklist
+              Checklist sa Paghahanda sa Sakuna
             </button>
           </>
         )}
@@ -34,7 +34,7 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
         {/* "View All Requests" Button (visible only in Responder View) */}
         {role === 'responder' && (
           <button className="nav-button" onClick={onViewAllRequests}>
-            View All Requests
+            Tignan ang mga nangangailangan
           </button>
         )}
 

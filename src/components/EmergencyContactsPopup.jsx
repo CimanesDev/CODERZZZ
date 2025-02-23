@@ -2,11 +2,10 @@ import React from 'react';
 
 const EmergencyContactsPopup = ({ onClose }) => {
   const contacts = [
-    { name: 'Police', number: '100' },
-    { name: 'Fire Department', number: '101' },
-    { name: 'Ambulance', number: '102' },
-    { name: 'Disaster Management', number: '108' },
-    { name: 'Coast Guard', number: '109' },
+    { name: 'Philippine National Police', number: '117' },
+    { name: 'Philippine Red Cross', number: '143' },
+    { name: 'Bureau of Fire Protection', number: '(02) 8426-0219' },
+    { name: 'National Emergency Hotline', number: '911' },
   ];
 
   return (

@@ -121,7 +121,7 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
 
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-        <h2>All Requests</h2>
+        <h2>Lahat ng Nangangailangan</h2>
         <div className="pin-list">
           {callForHelpPins.map((pin) => (
             <div
