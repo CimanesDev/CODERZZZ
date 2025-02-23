@@ -10,28 +10,39 @@ import './App.css';
 function App() {
   const [isCallForHelpMode, setIsCallForHelpMode] = useState(false);
   const [isDonateGoodsMode, setIsDonateGoodsMode] = useState(false);
-  const [role, setRole] = useState(null);
-  const [pins, setPins] = useState([]);
+  const [role, setRole] = useState(null); // 'victim' or 'responder'
+  const [pins, setPins] = useState([]); // Stores all pins (help and donation)
   const [showEmergencyContacts, setShowEmergencyContacts] = useState(false);
   const [showChecklist, setShowChecklist] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar visibility
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Controls sidebar visibility in ResponderView
 
+  // Handle role selection (Victim or Responder)
   const handleSelectRole = (selectedRole) => {
     setRole(selectedRole);
   };
 
+  // Handle back button (return to role selection)
   const handleBack = () => {
     setRole(null);
+    setIsCallForHelpMode(false);
+    setIsDonateGoodsMode(false);
+    setShowEmergencyContacts(false);
+    setShowChecklist(false);
+    setIsSidebarOpen(false);
   };
 
+  // Toggle sidebar visibility in ResponderView
   const handleViewAllRequests = () => {
-    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Render the appropriate content based on the role
   const renderContent = () => {
     if (!role) {
+      // Show StartingPage if no role is selected
       return <StartingPage onSelectRole={handleSelectRole} />;
     } else if (role === 'victim') {
+      // Victim View
       return (
         <>
           <Navbar
@@ -40,7 +51,7 @@ function App() {
             onBack={handleBack}
             onEmergencyContacts={() => setShowEmergencyContacts(true)}
             onChecklist={() => setShowChecklist(true)}
-            role={role} // Pass role to Navbar
+            role={role}
           />
           <Map
             isCallForHelpMode={isCallForHelpMode}
@@ -49,6 +60,7 @@ function App() {
             setIsDonateGoodsMode={setIsDonateGoodsMode}
             pins={pins}
             setPins={setPins}
+            role={role} // Pass role to Map
           />
           {showEmergencyContacts && (
             <EmergencyContactsPopup onClose={() => setShowEmergencyContacts(false)} />
@@ -59,14 +71,27 @@ function App() {
         </>
       );
     } else if (role === 'responder') {
+      // Responder View
       return (
         <>
           <Navbar
             onBack={handleBack}
-            role={role} // Pass role to Navbar
-            onViewAllRequests={handleViewAllRequests} // Pass sidebar toggle function
+            onDonateGoods={() => setIsDonateGoodsMode(true)} // Add donation functionality for responders
+            role={role}
+            onViewAllRequests={handleViewAllRequests}
           />
           <ResponderView pins={pins} isSidebarOpen={isSidebarOpen} />
+          {isDonateGoodsMode && (
+            <Map
+              isCallForHelpMode={false}
+              setIsCallForHelpMode={setIsCallForHelpMode}
+              isDonateGoodsMode={isDonateGoodsMode}
+              setIsDonateGoodsMode={setIsDonateGoodsMode}
+              pins={pins}
+              setPins={setPins}
+              role={role} // Pass role to Map
+            />
+          )}
         </>
       );
     }

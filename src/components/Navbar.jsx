@@ -19,9 +19,6 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
             <button className="nav-button" onClick={onCallForHelp}>
               Humingi ng tulong
             </button>
-            <button className="nav-button" onClick={onDonateGoods}>
-              Magdonate
-            </button>
             <button className="nav-button" onClick={onEmergencyContacts}>
               Emergency Contacts
             </button>
@@ -31,11 +28,16 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
           </>
         )}
 
-        {/* "View All Requests" Button (visible only in Responder View) */}
+        {/* Show these buttons only in Responder View */}
         {role === 'responder' && (
-          <button className="nav-button" onClick={onViewAllRequests}>
-            Tignan ang mga nangangailangan
-          </button>
+          <>
+            <button className="nav-button" onClick={onDonateGoods}>
+              Magdonate
+            </button>
+            <button className="nav-button" onClick={onViewAllRequests}>
+              Tignan ang mga nangangailangan
+            </button>
+          </>
         )}
 
         {/* Back Button (visible in both views) */}

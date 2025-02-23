@@ -2,13 +2,13 @@ import React from 'react';
 
 const Popup = ({ onSelectDisaster, onClose }) => {
   const disasters = [
-    { type: 'flood', icon: '🌊', label: 'Flood' },
-    { type: 'fire', icon: '🔥', label: 'Fire' },
-    { type: 'earthquake', icon: '🌍', label: 'Earthquake' },
+    { type: 'baha', icon: '🌊', label: 'Baha' },
+    { type: 'sunog', icon: '🔥', label: 'Sunog' },
+    { type: 'lindol', icon: '🌍', label: 'Lindol' },
     { type: 'medical', icon: '🚑', label: 'Medical Emergency' },
-    { type: 'roadblock', icon: '🚧', label: 'Roadblock' },
-    { type: 'food', icon: '🍲', label: 'Food/Water' },
-    { type: 'shelter', icon: '🏠', label: 'Shelter' },
+    { type: 'sirang kalsada', icon: '🚧', label: 'Sirang Kalsada' },
+    { type: 'pagkain', icon: '🍲', label: 'Pagkain/Tubig' },
+    { type: 'bahay', icon: '🏠', label: 'Bahay' },
     { type: 'landslide', icon: '⛰️', label: 'Landslide' },
   ];
 

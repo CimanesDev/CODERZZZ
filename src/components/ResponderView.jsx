@@ -2,22 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { GoogleMap, Marker, useLoadScript, DirectionsRenderer } from '@react-google-maps/api';
 import './ResponderView.css';
 
-const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Ensure this is set in your .env file
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
-const ResponderView = ({ pins, isSidebarOpen }) => {
+const ResponderView = ({ pins, setPins, isSidebarOpen, isVictimView }) => {
   const [selectedPin, setSelectedPin] = useState(null);
-  const [mapCenter, setMapCenter] = useState({ lat: 14, lng: 482 }); // Default center
-  const [userLocation, setUserLocation] = useState(null); // Store user's location
-  const [directions, setDirections] = useState(null); // Store directions response
-  const [showPopup, setShowPopup] = useState(false); // Control popup visibility
+  const [mapCenter, setMapCenter] = useState({ lat: 14, lng: 482 });
+  const [userLocation, setUserLocation] = useState(null);
+  const [directions, setDirections] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
-  // Load the Google Maps script
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: apiKey,
     libraries: ['places', 'directions'],
   });
 
-  // Get the user's current location when the component mounts
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -26,109 +24,75 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          setUserLocation(location); // Store user's location
-          setMapCenter(location); // Set map center to user's location
+          setUserLocation(location);
+          setMapCenter(location);
         },
-        (error) => {
-          console.error('Error getting user location:', error);
-          // Fallback to default location if user denies location access
-          setMapCenter({ lat: 14, lng: 482 });
-        }
+        () => setMapCenter({ lat: 14, lng: 482 })
       );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-      // Fallback to default location if geolocation is not supported
-      setMapCenter({ lat: 14, lng: 482 });
     }
   }, []);
 
-  // Filter only "Call for Help" pins (type: 'help')
-  const callForHelpPins = pins.filter((pin) => pin.type === 'help');
-
-  // Handle pin selection from the list
   const handlePinClick = (pin) => {
     setSelectedPin(pin);
-    setMapCenter(pin.position); // Center the map on the clicked pin's location
-    setShowPopup(true); // Show the popup
+    setMapCenter(pin.position);
+    setShowPopup(true);
   };
 
-  // Handle "Yes" button click in the popup
+
+
   const handleConfirmDirections = () => {
-    if (userLocation) {
-      // Calculate directions from user's location to the selected pin
+    if (userLocation && selectedPin) {
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
         {
           origin: userLocation,
           destination: selectedPin.position,
-          travelMode: window.google.maps.TravelMode.DRIVING, // You can change this to WALKING, BICYCLING, etc.
+          travelMode: window.google.maps.TravelMode.DRIVING,
         },
         (result, status) => {
           if (status === window.google.maps.DirectionsStatus.OK) {
-            setDirections(result); // Set directions to display on the map
+            setDirections(result);
           } else {
             console.error('Error fetching directions:', status);
           }
         }
       );
     }
-    setShowPopup(false); // Close the popup
+    setShowPopup(false);
   };
 
-  // Handle "No" button click in the popup
   const handleCancelDirections = () => {
-    setDirections(null); // Clear directions
-    setShowPopup(false); // Close the popup
+    setDirections(null);
+    setShowPopup(false);
   };
 
-  // Show a loading message while the script is loading
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div className="responder-view">
-      {/* Map */}
       <div className="map-container">
-        <GoogleMap
-          zoom={12}
-          center={mapCenter} // Use the current map center
-          mapContainerStyle={{ width: '100%', height: '100vh' }}
-        >
-          {/* Render all "Call for Help" pins */}
-          {callForHelpPins.map((pin) => (
+        <GoogleMap zoom={12} center={mapCenter} mapContainerStyle={{ width: '100%', height: '100vh' }}>
+          {pins.map((pin) => (
             <Marker
               key={pin.id}
               position={pin.position}
               onClick={() => handlePinClick(pin)}
               icon={{
-                url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                url: pin.type === 'donation' 
+                  ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' 
+                  : 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
               }}
             />
           ))}
-
-          {/* Render directions if available */}
-          {directions && (
-            <DirectionsRenderer
-              directions={directions}
-              options={{
-                suppressMarkers: true, // Hide default markers
-              }}
-            />
-          )}
+          {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: true }} />}
         </GoogleMap>
       </div>
 
-      {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <h2>Lahat ng Nangangailangan</h2>
         <div className="pin-list">
-          {callForHelpPins.map((pin) => (
-            <div
-              key={pin.id}
-              className={`pin-item ${selectedPin?.id === pin.id ? 'selected' : ''}`}
-              onClick={() => handlePinClick(pin)}
-            >
+          {pins.filter((pin) => pin.type === 'help').map((pin) => (
+            <div key={pin.id} className={`pin-item ${selectedPin?.id === pin.id ? 'selected' : ''}`} onClick={() => handlePinClick(pin)}>
               <h3>{pin.disasterType}</h3>
               <p>{pin.address}</p>
             </div>
@@ -136,20 +100,26 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
         </div>
       </div>
 
-      {/* Popup for directions confirmation */}
-      {showPopup && (
+      {showPopup && selectedPin && (
         <div className="popup-overlay">
           <div className="popup">
-            <h3>Gusto mo ba ng ruta patungo rito?</h3>
-            <div className="popup-buttons">
-                <button className="popup-button cofirm" onClick={handleConfirmDirections}>
-                Gusto
-                </button>
-                <button className="popup-button cancel" onClick={handleCancelDirections}>
-                Ayaw
-                </button>
-              
-            </div>
+            <h3>Detalye ng {selectedPin.type === 'donation' ? 'Donasyon' : 'Pangangailangan'}</h3>
+            <p>{selectedPin.disasterType}</p>
+            <p>{selectedPin.address}</p>
+            
+            {selectedPin.type === 'donation' ? (
+              <>
+                <button className="popup-button cancel" onClick={() => setShowPopup(false)}>Okay</button>
+              </>
+            ) : (
+              <>
+                <h4>Gusto mo ba ng ruta patungo rito?</h4>
+                <div className="popup-buttons">
+                <button className="popup-button yes" onClick={handleConfirmDirections}>Gusto</button>
+                <button className="popup-button cancel" onClick={handleCancelDirections}>Ayaw</button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleMap, Marker, useLoadScript, Autocomplete } from '@react-google-maps/api';
 import axios from 'axios';
@@ -15,6 +14,7 @@ const Map = ({
   setIsDonateGoodsMode,
   pins,
   setPins,
+  role, // Add role prop
 }) => {
   const [markerPosition, setMarkerPosition] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -46,7 +46,7 @@ const Map = ({
           fetchAddress(userLocation);
 
           // If in "Donate Goods" mode, show the donation popup immediately
-          if (isDonateGoodsMode) {
+          if (isDonateGoodsMode && role === 'responder') {
             setShowDonationPopup(true);
           }
         },
@@ -61,7 +61,7 @@ const Map = ({
       // Fallback to a default location if geolocation is not supported
       setMapCenter({ lat: 14, lng: 482 });
     }
-  }, [isCallForHelpMode, isDonateGoodsMode]);
+  }, [isCallForHelpMode, isDonateGoodsMode, role]);
 
   // Fetch address from coordinates
   const fetchAddress = async (position) => {
@@ -127,7 +127,7 @@ const Map = ({
 
   // Handle donation submission
   const handleDonationSubmit = () => {
-    if (markerPosition) {
+    if (markerPosition && role === 'responder') {
       const newPin = {
         id: Date.now(),
         position: markerPosition,
@@ -240,7 +240,7 @@ const Map = ({
       )}
 
       {/* Popup for donation details */}
-      {showDonationPopup && (
+      {showDonationPopup && role === 'responder' && (
         <DonationPopup
           address={address}
           onConfirm={handleDonationSubmit}
@@ -250,26 +250,18 @@ const Map = ({
         />
       )}
 
-      {/* Pin details when a pin is selected */}
-      {selectedPin && (
+      {/* Pin details when a pin is selected and is a 'help' pin */}
+      {selectedPin && selectedPin.type === 'help' && (
         <div className="pin-details">
           <p>
-            {selectedPin.type === 'donation' ? (
-              <>
-                Donation at <strong>{selectedPin.address}</strong> with{" "}
-                <strong>{selectedPin.goods}</strong> (Quantity: {selectedPin.quantity}).
-              </>
-            ) : (
-              <>
-                Help asked at <strong>{selectedPin.address}</strong> with{" "}
-                <strong>{selectedPin.disasterType}</strong>.
-              </>
-            )}
+            May nangangailangan sa <strong>{selectedPin.address}</strong> at may {" "}
+            <strong>{selectedPin.disasterType}</strong>.
           </p>
           <button onClick={() => handleDeletePin(selectedPin.id)}>Delete Pin</button>
           <button onClick={() => setSelectedPin(null)}>Okay</button>
         </div>
       )}
+
     </>
   );
 };
