@@ -17,7 +17,7 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
         {role === 'victim' && (
           <>
             <button className="nav-button" onClick={onCallForHelp}>
-              Manghingi ng tulong
+              Humingi ng tulong
             </button>
             <button className="nav-button" onClick={onDonateGoods}>
               Magdonate
@@ -40,7 +40,7 @@ const Navbar = ({ onCallForHelp, onDonateGoods, onBack, onEmergencyContacts, onC
 
         {/* Back Button (visible in both views) */}
         <button className="back-button" onClick={onBack}>
-          Back
+          Bumalik
         </button>
       </div>
     </div>

@@ -9,6 +9,7 @@ const Popup = ({ onSelectDisaster, onClose }) => {
     { type: 'roadblock', icon: '🚧', label: 'Roadblock' },
     { type: 'food', icon: '🍲', label: 'Food/Water' },
     { type: 'shelter', icon: '🏠', label: 'Shelter' },
+    { type: 'landslide', icon: '⛰️', label: 'Landslide' },
   ];
 
   return (
