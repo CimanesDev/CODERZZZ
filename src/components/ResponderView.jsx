@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
-import { GoogleMap, Marker } from '@react-google-maps/api';
+import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import './ResponderView.css';
 
-const ResponderView = ({ pins, setPins }) => {
-  const [filteredPins, setFilteredPins] = useState(pins);
-  const [selectedPin, setSelectedPin] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY; // Ensure this is set in your .env file
 
-  // Filter pins by disaster type
-  const handleFilter = (disasterType) => {
-    if (disasterType === 'all') {
-      setFilteredPins(pins);
-    } else {
-      setFilteredPins(pins.filter((pin) => pin.disasterType === disasterType));
-    }
-  };
+const ResponderView = ({ pins, isSidebarOpen }) => {
+  const [selectedPin, setSelectedPin] = useState(null);
+
+  // Load the Google Maps script
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: apiKey,
+    libraries: ['places'],
+  });
+
+  // Filter only "Call for Help" pins (type: 'help')
+  const callForHelpPins = pins.filter((pin) => pin.type === 'help');
 
   // Handle pin selection from the list
   const handlePinClick = (pin) => {
     setSelectedPin(pin);
   };
+
+  // Show a loading message while the script is loading
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="responder-view">
@@ -30,7 +35,8 @@ const ResponderView = ({ pins, setPins }) => {
           center={selectedPin ? selectedPin.position : { lat: 14, lng: 482 }}
           mapContainerStyle={{ width: '100%', height: '100vh' }}
         >
-          {filteredPins.map((pin) => (
+          {/* Render all "Call for Help" pins */}
+          {callForHelpPins.map((pin) => (
             <Marker
               key={pin.id}
               position={pin.position}
@@ -45,21 +51,12 @@ const ResponderView = ({ pins, setPins }) => {
 
       {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
-        <button className="toggle-sidebar" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-          {isSidebarOpen ? 'Close' : 'Open'}
-        </button>
-        <h2>View All Requests</h2>
-        <div className="filters">
-          <button onClick={() => handleFilter('all')}>All</button>
-          <button onClick={() => handleFilter('flood')}>Flood</button>
-          <button onClick={() => handleFilter('earthquake')}>Earthquake</button>
-          <button onClick={() => handleFilter('fire')}>Fire</button>
-        </div>
+        <h2>All Requests</h2>
         <div className="pin-list">
-          {filteredPins.map((pin) => (
+          {callForHelpPins.map((pin) => (
             <div
               key={pin.id}
-              className="pin-item"
+              className={`pin-item ${selectedPin?.id === pin.id ? 'selected' : ''}`}
               onClick={() => handlePinClick(pin)}
             >
               <h3>{pin.disasterType}</h3>

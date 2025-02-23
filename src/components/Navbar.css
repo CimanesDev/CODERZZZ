@@ -1,94 +1,90 @@
 /* Navbar Container */
 .nav-bar {
-  width: 300px; /* Fixed width for the navbar */
-  height: 100vh; /* Full viewport height */
-  background-color: #2c3e50; /* Darker background for contrast */
-  padding: 20px;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Align items to the top */
-  position: fixed; /* Fix the navbar in place */
-  z-index: 1000; /* Ensure it's above other elements */
-  overflow: hidden; /* Prevent scrolling */
+  align-items: flex-start;
+  background-color: #2c3e50; /* Match the StartingPage background */
+  color: #ecf0f1; /* Light text for contrast */
+  width: 300px; /* Increased width for better spacing */
+  height: 100vh; /* Full height */
+  padding: 30px; /* Increased padding for better spacing */
+  box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+  position: fixed; /* Fixed position on the left */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure Navbar is above other content */
 }
 
 /* Logo and Title */
 .nav-header {
   display: flex;
-  align-items: center;
-  margin-bottom: 30px;
+  align-items: center; /* Align logo and title horizontally */
+  margin-bottom: 30px; /* Increased margin for better spacing */
 }
 
 .nav-logo {
-  width: 50px; /* Adjust size as needed */
-  height: 50px;
-  margin-right: 15px;
+  width: 60px; /* Slightly smaller logo */
+  height: 60px;
+  margin-right: 15px; /* Space between logo and title */
   border-radius: 50%; /* Circular logo */
   object-fit: cover; /* Ensure the image fits */
 }
 
-.nav-bar h2 {
-  color: #ecf0f1; /* Light text for contrast */
-  font-size: 24px;
+.nav-header h2 {
+  font-size: 1.8rem; /* Slightly larger font size */
+  margin: 0;
+  color: #ecf0f1;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 0; /* Remove default margin */
 }
 
-/* Nav Buttons */
-.nav-button {
+/* Buttons Container */
+.nav-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Increased gap between buttons */
   width: 100%;
-  padding: 15px;
-  background-color: #3498db; /* Brighter blue */
-  color: white;
+}
+
+/* Navbar Buttons */
+.nav-button {
+  padding: 12px 20px; /* Slightly larger padding */
+  background-color: #3498db; /* Match the card background */
+  color: #ecf0f1;
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; /* Slightly rounded corners */
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1.1rem; /* Slightly larger font size */
   font-weight: 500;
-  margin-bottom: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%; /* Full width buttons */
+  text-align: left;
+  display: flex;
+  align-items: center; /* Center text vertically */
 }
 
 .nav-button:hover {
-  background-color: #2980b9; /* Darker blue on hover */
-  transform: translateY(-2px); /* Slight lift effect */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.nav-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #2980b9; /* Slightly darker on hover */
+  transform: translateY(-2px);
 }
 
 /* Back Button */
 .back-button {
-  margin-bottom: 30px;
-  width: 100%;
-  padding: 15px;
-  background-color: #e74c3c; /* Red color for the back button */
-  color: white;
+  padding: 12px 20px; /* Slightly larger padding */
+  background-color: #e74c3c; /* Red for contrast */
+  color: #ecf0f1;
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; /* Slightly rounded corners */
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1.1rem; /* Slightly larger font size */
   font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-top: auto; /* Pushes the button to the bottom */
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 100%; /* Full width buttons */
+  text-align: left;
+  display: flex;
+  align-items: center; /* Center text vertically */
 }
 
 .back-button:hover {
-  background-color: #c0392b; /* Darker red on hover */
-  transform: translateY(-2px); /* Slight lift effect */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
-
-.back-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #c0392b; /* Slightly darker on hover */
+  transform: translateY(-2px);
 }

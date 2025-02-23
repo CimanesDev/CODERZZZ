@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Map from './components/Map';
 import EmergencyContactsPopup from './components/EmergencyContactsPopup';
 import ChecklistPopup from './components/ChecklistPopup';
+import ResponderView from './components/ResponderView';
 import './App.css';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   const [pins, setPins] = useState([]);
   const [showEmergencyContacts, setShowEmergencyContacts] = useState(false);
   const [showChecklist, setShowChecklist] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for sidebar visibility
 
   const handleSelectRole = (selectedRole) => {
     setRole(selectedRole);
@@ -20,6 +22,10 @@ function App() {
 
   const handleBack = () => {
     setRole(null);
+  };
+
+  const handleViewAllRequests = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
   };
 
   const renderContent = () => {
@@ -34,6 +40,7 @@ function App() {
             onBack={handleBack}
             onEmergencyContacts={() => setShowEmergencyContacts(true)}
             onChecklist={() => setShowChecklist(true)}
+            role={role} // Pass role to Navbar
           />
           <Map
             isCallForHelpMode={isCallForHelpMode}
@@ -54,8 +61,12 @@ function App() {
     } else if (role === 'responder') {
       return (
         <>
-          <Navbar onBack={handleBack} />
-          <div className="responder-placeholder">Responder view not implemented yet.</div>
+          <Navbar
+            onBack={handleBack}
+            role={role} // Pass role to Navbar
+            onViewAllRequests={handleViewAllRequests} // Pass sidebar toggle function
+          />
+          <ResponderView pins={pins} isSidebarOpen={isSidebarOpen} />
         </>
       );
     }
