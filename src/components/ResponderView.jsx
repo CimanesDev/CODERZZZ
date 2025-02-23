@@ -142,12 +142,13 @@ const ResponderView = ({ pins, isSidebarOpen }) => {
           <div className="popup">
             <h3>Do you want directions to this place?</h3>
             <div className="popup-buttons">
-              <button className="popup-button cancel" onClick={handleCancelDirections}>
-                No
-              </button>
-              <button className="popup-button cofirm" onClick={handleConfirmDirections}>
-               Yes
-              </button>
+                <button className="popup-button cofirm" onClick={handleConfirmDirections}>
+                Yes
+                </button>
+                <button className="popup-button cancel" onClick={handleCancelDirections}>
+                    No
+                </button>
+              
             </div>
           </div>
         </div>
